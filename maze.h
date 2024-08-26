@@ -1,6 +1,7 @@
 #ifndef MAZE_H
 #define MAZE_H
 
+#include <math.h>
 #include <SDL2/SDL.h>
 
 /* Define FPS */
@@ -16,11 +17,19 @@ int last_frame_time = 0;
 #define COLOUR_RED(x) SDL_SetRenderDrawColor(x, 255, 0, 0, 255);
 #define COLOUR_GREEN(x) SDL_SetRenderDrawColor(x, 0, 255, 0, 255);
 #define COLOUR_BLUE(x) SDL_SetRenderDrawColor(x, 0, 0, 255, 255);
+#define COLOUR_GREY(x) SDL_SetRenderDrawColor(x, 100, 100, 100, 255);
 
 
 //Window control
 int WINDOW_WIDTH = 1500;
 int WINDOW_HEIGHT = 800;
+#define MAP_WIDTH  24
+#define MAP_HEIGHT  24
+
+int WALL_HEIGHT = 64;
+int TILE_SIZE = 64;
+
+
 
 #define WINDOW_W 1500
 #define WINDOW_H 800
@@ -30,11 +39,33 @@ int WINDOW_HEIGHT = 800;
 
 
 /**
+ * struct player - represents the position and direction faced by the player
+ * @pos_x: player position x
+ * @pos_y: player position y
+ * @angle: player direction in world.
+*/
+
+// typedef struct Player{
+//     double pos_x = 0;
+//     double pos_y = 0;
+//     double angle = 0;
+// } Player player;
+
+// TODO - Field of View 
+double FOV = 60;
+
+/**
+ * current view (angle + FOV/2) < view > (angle - FOV/2)
+*/
+
+
+/**
  * struct SDL_Instance - to contain window and associated renderer address.
  * 
  * @window: contain window address for this particular instance
  * @renderer: contain renderer address for this particular instance
 */
+
 
 typedef struct{
     SDL_Window *window;
