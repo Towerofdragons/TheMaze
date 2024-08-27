@@ -10,6 +10,18 @@
 
 int last_frame_time = 0;
 
+/**
+ * PLAYER POSITION AND DIRECTION INITIALIZATION 
+ */
+
+double posX, posY;
+double dirX, dirY;
+/* CAMERA PLANE*/
+double planeX, planeY; //the 2d raycaster version of camera plane
+
+double move_speed;
+double rotation_speed;
+
 
 /* A series of shortcuts to define render colour*/
 #define COLOUR_WHITE(x) SDL_SetRenderDrawColor(x, 255, 255, 255, 255);
@@ -18,6 +30,23 @@ int last_frame_time = 0;
 #define COLOUR_GREEN(x) SDL_SetRenderDrawColor(x, 0, 255, 0, 255);
 #define COLOUR_BLUE(x) SDL_SetRenderDrawColor(x, 0, 0, 255, 255);
 #define COLOUR_GREY(x) SDL_SetRenderDrawColor(x, 100, 100, 100, 255);
+
+/* A more versatile way to define Render colour */
+typedef struct{
+    Uint8 r;
+    Uint8 g;
+    Uint8 b;
+    Uint8 a;
+} colourRGB;
+
+const colourRGB white = {255, 255, 255, 255};
+const colourRGB black={ 0, 0, 0, 255};
+const colourRGB red ={ 255, 0, 0, 255};
+const colourRGB green ={ 0, 255, 0, 255};
+const colourRGB blue ={ 0, 0, 255, 255};
+const colourRGB yellow = { 255, 255, 0, 255};
+/* const colourRGB ={ , , , }; */
+
 
 
 //Window control
@@ -28,6 +57,8 @@ int WINDOW_HEIGHT = 800;
 
 int WALL_HEIGHT = 64;
 int TILE_SIZE = 64;
+
+
 
 
 

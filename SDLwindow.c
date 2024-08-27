@@ -77,10 +77,10 @@ int main (void)
  * PLAYER POSITION AND DIRECTION INITIALIZATION 
  */
 
-double posX = 2.0, posY = 2.0;
-double dirX = 0.5, dirY = 0.0;
+posX = 22.0, posY = 12.0;
+dirX = -1, dirY = 0;
 /* CAMERA PLANE*/
-double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
+planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 
  /*the position of the right blue point is pos+dir+plane, and 
  the posistion of the left blue dot is pos+dir-plane (these are all vector additions).*/
@@ -102,11 +102,6 @@ double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 
    while ("C is killing me in a fun way")
    {
-
-        COLOUR_BLACK(instance.renderer);
-        SDL_RenderClear(instance.renderer);
-        update(&instance);
-
         //Poll Events
         SDL_event_rep = poll_events();
 
@@ -161,7 +156,7 @@ double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
             int stepY;
 
             int hit = 0; //was there a wall hit?
-            int side; //was a NS or a EW wall hit?
+            int side; //was a N-S or a E-W wall hit?
 
 
             //calculate step and initial sideDist
@@ -241,18 +236,26 @@ double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 
             printf("%i",side);
 
+            colourRGB colour;
             //choose wall color
             switch(worldMap[mapX][mapY])
             {
-                case 1: COLOUR_BLUE(instance.renderer); break; //red
-                case 2: COLOUR_GREEN(instance.renderer); break; //green
-                case 3:  COLOUR_WHITE(instance.renderer); break; //blue
-                case 4: COLOUR_BLUE(instance.renderer);  break; //white
-                default: COLOUR_RED(instance.renderer); break; //yellow
+                case 1:  colour = red;  break; //red
+                case 2:  colour = green;  break; //green
+                case 3:  colour = blue;   break; //blue
+                case 4:  colour = white;  break; //white
+                default: colour = yellow; break; //yellow
             }
 
             //give x and y sides different brightness
-            if (side == 1) {COLOUR_GREY(instance.renderer);}
+            if (side == 1) 
+            {
+                SDL_SetRenderDrawColor(instance.renderer, colour.r / 2, colour.g / 2, colour.b / 2, colour.a / 2);
+            }
+            else
+            {
+                SDL_SetRenderDrawColor(instance.renderer, colour.r, colour.g, colour.b, colour.a);
+            }
 
             //draw the pixels of the stripe as a vertical line
 
@@ -266,6 +269,10 @@ double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
         i++;
         if (i == array_bound)
             i = 0;
+
+        COLOUR_BLACK(instance.renderer);
+        SDL_RenderClear(instance.renderer);
+        update(&instance);
 
        // printf("%i",p1[i]);
    }
@@ -324,6 +331,57 @@ int poll_events(void)
                 {
                     return (2);
                 }
+
+                // Move forward with no obstacle
+                if (key.keysym.scancode == SDL_SCANCODE_W)
+                {
+                    if(worldMap[(int)(posX + dirX * move_speed)][(int)posY] == 0)
+                    {
+                        posX += dirX * move_speed;
+                    }
+
+                     if(worldMap[(int)posX][(int)(posY + dirY * move_speed)] == 0)
+                    {
+                        posY += dirY * move_speed;
+                    }
+                }
+
+                // Move backward with no obstacle
+                if (key.keysym.scancode == SDL_SCANCODE_S)
+                {
+                    if(worldMap[(int)(posX - dirX * move_speed)][(int)posY] == 0)
+                    {
+                        posX -= dirX * move_speed;
+                    }
+
+                     if(worldMap[(int)posX][(int)(posY - dirY * move_speed)] == 0)
+                    {
+                        posY -= dirY * move_speed;
+                    }
+                }
+
+                 /*Rotate Left*/
+                if (key.keysym.scancode == SDL_SCANCODE_LEFT)
+                {
+                    double oldDirX = dirX;
+                    dirX = dirX * cos(rotation_speed) - dirY * sin(rotation_speed);
+                    dirY = oldDirX * sin(rotation_speed) + dirY * cos(rotation_speed);
+                    double oldPlaneX = planeX;
+                    planeX = planeX * cos(rotation_speed) - planeY * sin(rotation_speed);
+                    planeY = oldPlaneX * sin(rotation_speed) + planeY * cos(rotation_speed);
+                }
+
+                 /*Rotata Right*/
+                if (key.keysym.scancode == SDL_SCANCODE_RIGHT)
+                {
+                   double oldDirX = dirX;
+                    dirX = dirX * cos(-rotation_speed) - dirY * sin(-rotation_speed);
+                    dirY = oldDirX * sin(-rotation_speed) + dirY * cos(-rotation_speed);
+                    double oldPlaneX = planeX;
+                    planeX = planeX * cos(-rotation_speed) - planeY * sin(-rotation_speed);
+                    planeY = oldPlaneX * sin(-rotation_speed) + planeY * cos(-rotation_speed);
+                }
+
 
                 break;
             

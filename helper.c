@@ -60,7 +60,7 @@ int draw_square(SDL_Instance *instance_address)
 }
 
 /**
- *  update - logic to keep a fixed time per frame
+ *  update - logic to keep a fixed time per frame and regulate movement and rotation speed
  *  @instance: The sdl instance to be affected
  * 
  * Return: nothing
@@ -82,6 +82,9 @@ void update(SDL_Instance * instance)
     draw_square(instance);
 
     last_frame_time = SDL_GetTicks();
+    // speed modifier
+    move_speed = (double)delta_time * 2.0;
+    rotation_speed = (double)delta_time * 2.0;
 }
 
 void move()
