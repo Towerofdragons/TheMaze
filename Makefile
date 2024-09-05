@@ -8,7 +8,7 @@ OBJ_NAME = maze
 COMPILER_FLAGS = -Wall -Werror -Wextra -pedantic
 
 # Linker flags
-LINKER_FLAGS = -lSDL2 -lm
+LINKER_FLAGS = -lSDL2 -lm -lSDL2_image
 
 # Describe dependencies
 all : $(OBJS)

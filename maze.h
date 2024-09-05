@@ -3,6 +3,8 @@
 
 #include <math.h>
 #include <SDL2/SDL.h>
+#include <stdio.h>
+#include <SDL2/SDL_image.h>
 
 /* Define FPS */
 #define FPS 30
@@ -50,20 +52,27 @@ const colourRGB yellow = { 255, 255, 0, 255};
 
 
 //Window control
-int WINDOW_WIDTH = 1500;
-int WINDOW_HEIGHT = 800;
+#define WINDOW_W 1500
+#define WINDOW_H 800
+
+int WINDOW_WIDTH = WINDOW_W;
+int WINDOW_HEIGHT = WINDOW_H;
+
 #define MAP_WIDTH  24
 #define MAP_HEIGHT  24
+#define MAP_PATH "test.map"
 
 int WALL_HEIGHT = 64;
 int TILE_SIZE = 64;
 
 
+/*Texture array*/
+Uint32 buffer[WINDOW_H][WINDOW_W];
+#define TEXT_HEIGHT 64
+#define TEXT_WIDTH 64
 
 
 
-#define WINDOW_W 1500
-#define WINDOW_H 800
 
 #define true 0
 #define false 1

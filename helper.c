@@ -83,7 +83,7 @@ void update(SDL_Instance * instance)
 
     last_frame_time = SDL_GetTicks();
     // speed modifier
-    move_speed = (double)delta_time * 2.0;
+    move_speed = (double)delta_time * 5.0;
     rotation_speed = (double)delta_time * 2.0;
 }
 

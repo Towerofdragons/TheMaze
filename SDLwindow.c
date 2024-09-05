@@ -202,8 +202,9 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
                 if (worldMap[mapX][mapY] > 0) 
                 {
                     hit = 1;
-                    printf("\nHit\n");
+                    //printf("\nHit\n");
                 }
+                /*TODO -  What if DDA detects no hit? eg no wall on outer borders*/
             } 
         
             //Calculate distance projected on camera direction (Euclidean distance would give fisheye effect!)
@@ -234,8 +235,8 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
                 drawEnd = WINDOW_HEIGHT - 1;
             }
 
-            printf("%i",side);
-
+            //printf("%i",side);
+/*
             colourRGB colour;
             //choose wall color
             switch(worldMap[mapX][mapY])
@@ -260,6 +261,37 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
             //draw the pixels of the stripe as a vertical line
 
             SDL_RenderDrawLine(instance.renderer, x, drawStart, x, drawEnd);
+*/
+             /*Create surface and texture*/
+            SDL_Surface* surface = IMG_Load("static/wood.png");
+            if (!surface) {
+                printf("Unable to load image! IMG_Error: %s\n", IMG_GetError());
+                return 1;
+            }
+
+            SDL_Texture* texture = SDL_CreateTextureFromSurface(instance.renderer, surface);
+            if (!texture) {
+                printf("Unable to create texture! SDL_Error: %s\n", SDL_GetError());
+                return 1;
+            }
+
+            double wallX; // x-coord where the wall was hit
+            if (side == 0) wallX = posY + perpWallDist * rayDirY;
+            else           wallX = posX + perpWallDist * rayDirX;
+            wallX -= floor(wallX);
+
+            int texWidth = 100, texHeight = 100;
+            SDL_QueryTexture(texture, NULL, NULL, &texWidth, &texHeight);
+
+            int texX = (int)(wallX * (double)texWidth);
+            if (side == 0 && rayDirX > 0) texX = texWidth - texX - 1;
+            if (side == 1 && rayDirY < 0) texX = texWidth - texX - 1;
+
+            SDL_Rect srcRect = {texX, 0, 1, texHeight};
+            SDL_Rect destRect = {x, drawStart, 1, drawEnd - drawStart};
+
+            SDL_RenderCopy(instance.renderer , texture, &srcRect, &destRect);
+            SDL_FreeSurface(surface);
 
         }
 
@@ -312,6 +344,9 @@ int poll_events(void)
     SDL_Event event;
     SDL_KeyboardEvent key;
 
+    double oldDirX;
+    double oldPlaneX;
+
     // Curse over the event stack to identify new events.
     while (SDL_PollEvent(&event))
     {
@@ -333,8 +368,11 @@ int poll_events(void)
                 }
 
                 // Move forward with no obstacle
-                if (key.keysym.scancode == SDL_SCANCODE_W)
+                switch (key.keysym.scancode)
                 {
+                    case SDL_SCANCODE_W:
+                    printf("Back");
+                
                     if(worldMap[(int)(posX + dirX * move_speed)][(int)posY] == 0)
                     {
                         posX += dirX * move_speed;
@@ -344,11 +382,11 @@ int poll_events(void)
                     {
                         posY += dirY * move_speed;
                     }
-                }
+                    break;
 
                 // Move backward with no obstacle
-                if (key.keysym.scancode == SDL_SCANCODE_S)
-                {
+                case SDL_SCANCODE_S:
+                    printf("Forward");
                     if(worldMap[(int)(posX - dirX * move_speed)][(int)posY] == 0)
                     {
                         posX -= dirX * move_speed;
@@ -358,32 +396,37 @@ int poll_events(void)
                     {
                         posY -= dirY * move_speed;
                     }
-                }
+                    break;
 
                  /*Rotate Left*/
-                if (key.keysym.scancode == SDL_SCANCODE_LEFT)
-                {
-                    double oldDirX = dirX;
+                case SDL_SCANCODE_LEFT:
+                    printf("Turn Left");
+                    oldDirX = dirX;
                     dirX = dirX * cos(rotation_speed) - dirY * sin(rotation_speed);
                     dirY = oldDirX * sin(rotation_speed) + dirY * cos(rotation_speed);
-                    double oldPlaneX = planeX;
+                    oldPlaneX = planeX;
                     planeX = planeX * cos(rotation_speed) - planeY * sin(rotation_speed);
                     planeY = oldPlaneX * sin(rotation_speed) + planeY * cos(rotation_speed);
-                }
+                
+                    break;
 
-                 /*Rotata Right*/
-                if (key.keysym.scancode == SDL_SCANCODE_RIGHT)
-                {
-                   double oldDirX = dirX;
+                 /*Rotate Right*/
+                case SDL_SCANCODE_RIGHT:
+                    printf("Turn Right");
+                    oldDirX = dirX;
                     dirX = dirX * cos(-rotation_speed) - dirY * sin(-rotation_speed);
                     dirY = oldDirX * sin(-rotation_speed) + dirY * cos(-rotation_speed);
-                    double oldPlaneX = planeX;
+                    oldPlaneX = planeX;
                     planeX = planeX * cos(-rotation_speed) - planeY * sin(-rotation_speed);
                     planeY = oldPlaneX * sin(-rotation_speed) + planeY * cos(-rotation_speed);
+
+                    break;
+                
+                default:
+                    break;
                 }
 
-
-                break;
+                
             
             default:
                 break;
@@ -417,9 +460,12 @@ int init_instance(SDL_Instance * instance_address)
         return (1);
     }
 
+    
+
     /*Create new renderer instance linked to the window*/
     instance_address->renderer = SDL_CreateRenderer( instance_address->window, -1,
     SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    
 
     if (instance_address->renderer == NULL)
     {
@@ -428,6 +474,7 @@ int init_instance(SDL_Instance * instance_address)
         SDL_Quit();
         return(1);
     }
+
 
     return (0);
 }
