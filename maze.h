@@ -72,7 +72,10 @@ int TILE_SIZE = 64;
 
 
 /*Texture array*/
-SDL_Texture *texture_array[6];
+#define TEXTURE_COUNT 6
+SDL_Texture *texture_array[TEXTURE_COUNT];
+SDL_Texture *texture_array_dark[TEXTURE_COUNT];
+
 #define STATIC_FOLDER "static/"
 #define TEXTURE_NUMBER 6
 char* texture_list[TEXTURE_NUMBER]= {"wood.png", "greystone.png", "pillar.png", "redbrick.png", "mossy.png", "purplestone.png"};
@@ -127,5 +130,5 @@ int poll_events(void);
 void destroy(SDL_Instance * instance);
 void update(SDL_Instance * instance);
 int load_textures(SDL_Instance instance, SDL_Surface* surface);
-
+void adjust_brightness(SDL_Texture *texture);
 #endif

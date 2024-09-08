@@ -200,15 +200,15 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
                 //jump to next map square, either in x-direction, or in y-direction
                 if (sideDistX < sideDistY)
                 {
-                sideDistX += deltaDistX;
-                mapX += stepX;
-                side = 0;
+                    sideDistX += deltaDistX;
+                    mapX += stepX;
+                    side = 0;
                 }
                 else
                 {
-                sideDistY += deltaDistY;
-                mapY += stepY;
-                side = 1;
+                    sideDistY += deltaDistY;
+                    mapY += stepY;
+                    side = 1;
                 }
                 //Check if ray has hit a wall
                 if (worldMap[mapX][mapY] > 0) 
@@ -248,32 +248,38 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
             }
 
             
-            texture = texture_array[worldMap[mapX][mapY]];
-/*
+/*       
+
             //give x and y sides different brightness
             if (side == 1) 
             {
-                SDL_SetRenderDrawColor(instance.renderer, colour.r / 2, colour.g / 2, colour.b / 2, colour.a / 2);
+                texture = texture_array[worldMap[mapX][mapY]];
+                //SDL_SetRenderDrawColor(instance.renderer, colour.r / 2, colour.g / 2, colour.b / 2, colour.a / 2);
             }
             else
             {
-                SDL_SetRenderDrawColor(instance.renderer, colour.r, colour.g, colour.b, colour.a);
+                texture = texture_array_dark[worldMap[mapX][mapY]];
+                //SDL_SetRenderDrawColor(instance.renderer, colour.r, colour.g, colour.b, colour.a);
             }
 
             //draw the pixels of the stripe as a vertical line
 
-            SDL_RenderDrawLine(instance.renderer, x, drawStart, x, drawEnd);
+            //SDL_RenderDrawLine(instance.renderer, x, drawStart, x, drawEnd);
+
 */
         
 
             double wallX; // x-coord where the wall was hit
+            //give x and y sides different brightness while calculating wall X
             if (side == 0) 
             {
                 wallX = posY + perpWallDist * rayDirY;
+                texture = texture_array[worldMap[mapX][mapY]];
             }
             else
             {           
                 wallX = posX + perpWallDist * rayDirX;
+                texture = texture_array_dark[worldMap[mapX][mapY]];
             }
 
             wallX -= floor(wallX);
