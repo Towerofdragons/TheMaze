@@ -2,9 +2,14 @@
 #define MAZE_H
 
 #include <math.h>
+#include <string.h>
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <SDL2/SDL_image.h>
+
+/*DEBUG MODE*/
+#define DEBUG 0
+
 
 /* Define FPS */
 #define FPS 30
@@ -67,11 +72,10 @@ int TILE_SIZE = 64;
 
 
 /*Texture array*/
-Uint32 buffer[WINDOW_H][WINDOW_W];
-#define TEXT_HEIGHT 64
-#define TEXT_WIDTH 64
-
-
+SDL_Texture *texture_array[6];
+#define STATIC_FOLDER "static/"
+#define TEXTURE_NUMBER 6
+char* texture_list[TEXTURE_NUMBER]= {"wood.png", "greystone.png", "pillar.png", "redbrick.png", "mossy.png", "purplestone.png"};
 
 
 #define true 0
@@ -122,5 +126,6 @@ int draw_square(SDL_Instance * instance);
 int poll_events(void);
 void destroy(SDL_Instance * instance);
 void update(SDL_Instance * instance);
+int load_textures(SDL_Instance instance, SDL_Surface* surface);
 
 #endif

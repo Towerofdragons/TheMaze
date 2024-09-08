@@ -1,5 +1,6 @@
 #include "maze.h"
 #include "helper.c"
+#include "texture.c"
 #include <stdio.h>
 
 
@@ -53,6 +54,13 @@ int main (void)
     SDL_Instance instance;
     int SDL_event_rep;
 
+    SDL_Surface* surface;
+    SDL_Texture* texture;
+    int texWidth, texHeight;
+    int texX;
+
+    surface =  NULL;
+
     if (init_instance(&instance) != 0)
         return (1);
 
@@ -89,6 +97,10 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 //double planeX = planeX + posX + dirX, double plane_Y = planeY + posY + dirY ;
 
 
+ if (load_textures(instance, surface)) {
+                printf("Unable to create textures!");
+                return 1;
+            }
 
 
     /**
@@ -235,19 +247,9 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
                 drawEnd = WINDOW_HEIGHT - 1;
             }
 
-            //printf("%i",side);
+            
+            texture = texture_array[worldMap[mapX][mapY]];
 /*
-            colourRGB colour;
-            //choose wall color
-            switch(worldMap[mapX][mapY])
-            {
-                case 1:  colour = red;  break; //red
-                case 2:  colour = green;  break; //green
-                case 3:  colour = blue;   break; //blue
-                case 4:  colour = white;  break; //white
-                default: colour = yellow; break; //yellow
-            }
-
             //give x and y sides different brightness
             if (side == 1) 
             {
@@ -262,28 +264,23 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 
             SDL_RenderDrawLine(instance.renderer, x, drawStart, x, drawEnd);
 */
-             /*Create surface and texture*/
-            SDL_Surface* surface = IMG_Load("static/wood.png");
-            if (!surface) {
-                printf("Unable to load image! IMG_Error: %s\n", IMG_GetError());
-                return 1;
-            }
-
-            SDL_Texture* texture = SDL_CreateTextureFromSurface(instance.renderer, surface);
-            if (!texture) {
-                printf("Unable to create texture! SDL_Error: %s\n", SDL_GetError());
-                return 1;
-            }
+        
 
             double wallX; // x-coord where the wall was hit
-            if (side == 0) wallX = posY + perpWallDist * rayDirY;
-            else           wallX = posX + perpWallDist * rayDirX;
+            if (side == 0) 
+            {
+                wallX = posY + perpWallDist * rayDirY;
+            }
+            else
+            {           
+                wallX = posX + perpWallDist * rayDirX;
+            }
+
             wallX -= floor(wallX);
 
-            int texWidth = 100, texHeight = 100;
             SDL_QueryTexture(texture, NULL, NULL, &texWidth, &texHeight);
-
-            int texX = (int)(wallX * (double)texWidth);
+            
+            texX = (int)(wallX * (double)texWidth);
             if (side == 0 && rayDirX > 0) texX = texWidth - texX - 1;
             if (side == 1 && rayDirY < 0) texX = texWidth - texX - 1;
 
@@ -306,7 +303,6 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
         SDL_RenderClear(instance.renderer);
         update(&instance);
 
-       // printf("%i",p1[i]);
    }
 
     // Release everything initialized by SDL
@@ -371,7 +367,7 @@ int poll_events(void)
                 switch (key.keysym.scancode)
                 {
                     case SDL_SCANCODE_W:
-                    printf("Back");
+                    if(DEBUG) printf("Back/n");
                 
                     if(worldMap[(int)(posX + dirX * move_speed)][(int)posY] == 0)
                     {
@@ -386,7 +382,7 @@ int poll_events(void)
 
                 // Move backward with no obstacle
                 case SDL_SCANCODE_S:
-                    printf("Forward");
+                    if(DEBUG) printf("Forward/n");
                     if(worldMap[(int)(posX - dirX * move_speed)][(int)posY] == 0)
                     {
                         posX -= dirX * move_speed;
@@ -400,7 +396,7 @@ int poll_events(void)
 
                  /*Rotate Left*/
                 case SDL_SCANCODE_LEFT:
-                    printf("Turn Left");
+                    if(DEBUG) printf("Turn Left/n");
                     oldDirX = dirX;
                     dirX = dirX * cos(rotation_speed) - dirY * sin(rotation_speed);
                     dirY = oldDirX * sin(rotation_speed) + dirY * cos(rotation_speed);
@@ -412,7 +408,7 @@ int poll_events(void)
 
                  /*Rotate Right*/
                 case SDL_SCANCODE_RIGHT:
-                    printf("Turn Right");
+                    if(DEBUG) printf("Turn Right/n");
                     oldDirX = dirX;
                     dirX = dirX * cos(-rotation_speed) - dirY * sin(-rotation_speed);
                     dirY = oldDirX * sin(-rotation_speed) + dirY * cos(-rotation_speed);
