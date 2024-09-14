@@ -80,6 +80,9 @@ SDL_Texture *texture_array_dark[TEXTURE_COUNT];
 #define TEXTURE_NUMBER 6
 char* texture_list[TEXTURE_NUMBER]= {"wood.png", "greystone.png", "pillar.png", "redbrick.png", "mossy.png", "purplestone.png"};
 
+#define FLOOR_TEXTURE  texture_array[1]
+#define CEILING_TEXTURE texture_array[1]
+
 
 #define true 0
 #define false 1

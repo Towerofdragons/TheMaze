@@ -1,6 +1,7 @@
 #include "maze.h"
 #include "helper.c"
 #include "texture.c"
+#include "raycast.c"
 #include <stdio.h>
 
 
@@ -64,20 +65,6 @@ int main (void)
     if (init_instance(&instance) != 0)
         return (1);
 
-    //           L1, L2
-    int p1X[] = {0, 750}; //P1L1
-    int p1Y[] = {400, 0}; //P1L2
-
-    int p2X[] = {1500, 750};//P2L1
-    int p2Y[] = {400, 800};//P2L2
-    
-    int i = 0;
-    int array_bound = 2;
-
-    square.x = 0;
-    square.y = WINDOW_HEIGHT/4;
-    square.w = 50;
-    square.h = 50;
 
 
 
@@ -130,10 +117,9 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
             }
         } 
 
-        // Draw axes
-        draw_line(&instance, p1X[i], p1Y[i], p2X[i], p2Y[i]);
-        i++;
-        draw_line(&instance, p1X[i], p1Y[i], p2X[i], p2Y[i]);
+
+        renderFloor(instance.renderer,posX,  posY, dirX,  dirY,  planeX, planeY, texWidth, texHeight);
+
        
         for(int x = 0; x < (double)WINDOW_WIDTH; x ++)
         {
@@ -301,10 +287,6 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 
         SDL_RenderPresent(instance.renderer);
 
-        i++;
-        if (i == array_bound)
-            i = 0;
-
         COLOUR_BLACK(instance.renderer);
         SDL_RenderClear(instance.renderer);
         update(&instance);
@@ -354,8 +336,6 @@ int poll_events(void)
     {
         switch (event.type)
         {
-            case SDL_QUIT:
-                return (1);
 
             case SDL_KEYDOWN:
                 key = event.key;
@@ -370,9 +350,9 @@ int poll_events(void)
                 }
 
                 // Move forward with no obstacle
-                switch (key.keysym.scancode)
+            
+                if (key.keysym.scancode == SDL_SCANCODE_W)
                 {
-                    case SDL_SCANCODE_W:
                     if(DEBUG) printf("Back/n");
                 
                     if(worldMap[(int)(posX + dirX * move_speed)][(int)posY] == 0)
@@ -380,14 +360,15 @@ int poll_events(void)
                         posX += dirX * move_speed;
                     }
 
-                     if(worldMap[(int)posX][(int)(posY + dirY * move_speed)] == 0)
+                        if(worldMap[(int)posX][(int)(posY + dirY * move_speed)] == 0)
                     {
                         posY += dirY * move_speed;
                     }
-                    break;
+                }
 
                 // Move backward with no obstacle
-                case SDL_SCANCODE_S:
+                 if (key.keysym.scancode == SDL_SCANCODE_S)
+                 {
                     if(DEBUG) printf("Forward/n");
                     if(worldMap[(int)(posX - dirX * move_speed)][(int)posY] == 0)
                     {
@@ -398,10 +379,11 @@ int poll_events(void)
                     {
                         posY -= dirY * move_speed;
                     }
-                    break;
+                 }
 
                  /*Rotate Left*/
-                case SDL_SCANCODE_LEFT:
+                if (key.keysym.scancode == SDL_SCANCODE_LEFT)
+                {
                     if(DEBUG) printf("Turn Left/n");
                     oldDirX = dirX;
                     dirX = dirX * cos(rotation_speed) - dirY * sin(rotation_speed);
@@ -410,10 +392,11 @@ int poll_events(void)
                     planeX = planeX * cos(rotation_speed) - planeY * sin(rotation_speed);
                     planeY = oldPlaneX * sin(rotation_speed) + planeY * cos(rotation_speed);
                 
-                    break;
+                }
 
                  /*Rotate Right*/
-                case SDL_SCANCODE_RIGHT:
+                if (key.keysym.scancode ==  SDL_SCANCODE_RIGHT)
+                {
                     if(DEBUG) printf("Turn Right/n");
                     oldDirX = dirX;
                     dirX = dirX * cos(-rotation_speed) - dirY * sin(-rotation_speed);
@@ -422,13 +405,12 @@ int poll_events(void)
                     planeX = planeX * cos(-rotation_speed) - planeY * sin(-rotation_speed);
                     planeY = oldPlaneX * sin(-rotation_speed) + planeY * cos(-rotation_speed);
 
-                    break;
-                
-                default:
-                    break;
                 }
 
+            break;
                 
+            case SDL_QUIT:
+                return (1);  
             
             default:
                 break;
