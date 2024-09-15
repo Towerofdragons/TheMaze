@@ -81,6 +81,20 @@ SDL_Texture *texture_array_dark[TEXTURE_COUNT];
 char* texture_list[TEXTURE_COUNT]= {"wood.png", "greystone.png", "pillar.png", "redbrick.png", "mossy.png", "purplestone.png", "ghost.png"};
 
 
+/*Enemies*/
+#define NUM_ENEMIES 5
+#define ENEMY_SPEED 1.5
+#define ENEMY_TEXTURE 6
+
+typedef struct {
+    float x, y;  /*Position data for enemy*/
+    float speedX, speedY;  // Speed of the enemy (in x and y directions)
+    SDL_Texture* texture;  // SDL texture for rendering the enemy
+} Enemy;
+
+
+Enemy enemies[NUM_ENEMIES];
+
 #define true 0
 #define false 1
 
@@ -93,13 +107,13 @@ char* texture_list[TEXTURE_COUNT]= {"wood.png", "greystone.png", "pillar.png", "
  * @angle: player direction in world.
 */
 
-typedef struct {
-    int x, y;          // Position
-    int width, height; // Size to be rendered in
-    int speed;         // Movement speed
-    int health;        // Health or hit points
-    SDL_Texture *texture;
-} Enemy;
+// typedef struct {
+//     int x, y;          // Position
+//     int width, height; // Size to be rendered in
+//     int speed;         // Movement speed
+//     int health;        // Health or hit points
+//     SDL_Texture *texture;
+// } Enemy;
 
 struct Sprite {
     SDL_Texture * texture;

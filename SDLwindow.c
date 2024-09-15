@@ -1,6 +1,7 @@
 #include "maze.h"
 #include "helper.c"
 #include "texture.c"
+#include "enemies.c"
 #include <stdio.h>
 
 
@@ -83,6 +84,8 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
             }
 
  if (DEBUG) printf("Textures Loaded");
+
+ init_enemies(enemies, texture_array[ENEMY_TEXTURE]);
 
 
     /**
@@ -258,6 +261,7 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 
         }
 
+        render_enemies(instance.renderer, enemies);
 
         SDL_RenderPresent(instance.renderer);
 
