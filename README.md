@@ -20,15 +20,15 @@ To compile and run The Maze, you’ll need SDL2, which is a popular and handy li
 
 * Update package lists:
 
-` sudo apt update`
+> ` sudo apt update`
 
 * Install SDL2 and development packages
 
-` sudo apt install libsdl2-dev `
+> ` sudo apt install libsdl2-dev `
 
 * Install Additional SDL2 libraries for media handling eg, loading textures:
 
-` sudo apt install libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev `
+> ` sudo apt install libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev `
 
 
 2. Clone and compile the project
@@ -36,7 +36,7 @@ To compile and run The Maze, you’ll need SDL2, which is a popular and handy li
 * Clone the repository and navigate to the project folder.
 * Compile the game using the pre-included makefile!
 
-` make all `
+> ` make all `
  
  > The makefile automatically runs the game.
 
@@ -45,7 +45,7 @@ To compile and run The Maze, you’ll need SDL2, which is a popular and handy li
 
 ## Usage
 Run the game after compiling.
-`./maze `
+> `./maze `
 
 
 ---
