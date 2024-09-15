@@ -6,9 +6,9 @@
 The Maze is a raycasting-based demo that simulates a 3D environment using 2D rendering techniques. Built in C with SDL2, the project showcases a simple maze environment where the player can navigate through walls and view objects from a first-person perspective. This technical demonstration highlights core raycasting principles, such as calculating distances, rendering walls, and handling movement within a grid-based map.
 
 
-Must include link to your deployed site, final project blog article, author(s) LinkedIn
 [The Maze Site](https://www.towerofdragons.github.io)
 [My LinkedIn](https://www.linkedin.com/in/mark-rodney-njoroge)
+
 Here's a [blog](#) that details my experience writing this game!
 
 ## Installation
@@ -16,7 +16,8 @@ Here's a [blog](#) that details my experience writing this game!
 1. Install SDL2
 To compile and run The Maze, you’ll need SDL2, which is a popular and handy library for handling graphics, input, and audio in C/C++.
 
-On Linux(Ubuntu/Debian:)
+- On Linux(Ubuntu/Debian)
+
 * Update package lists:
 
 ``` sudo apt update```
