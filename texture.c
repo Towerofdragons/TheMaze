@@ -11,7 +11,7 @@ int load_textures(SDL_Instance instance, SDL_Surface* surface)
 {   
     char path[100];
 
-    for (int i = 0; i < TEXTURE_NUMBER; i++)
+    for (int i = 0; i < TEXTURE_COUNT; i++)
     {
         /*Construct complete path to texture*/
         strcpy(path, STATIC_FOLDER);
@@ -25,8 +25,11 @@ int load_textures(SDL_Instance instance, SDL_Surface* surface)
             return 1;
         }
 
+        if (DEBUG) printf("Loading  texture from surface\n");
         texture_array[i] = SDL_CreateTextureFromSurface(instance.renderer, surface);
         texture_array_dark[i] = SDL_CreateTextureFromSurface(instance.renderer, surface);
+
+        if (DEBUG) printf("Loading  texture from surface... Done!\n");
         
         adjust_brightness(texture_array_dark[i]);
         if (!texture_array[i]) {

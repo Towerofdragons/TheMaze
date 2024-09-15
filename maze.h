@@ -8,7 +8,7 @@
 #include <SDL2/SDL_image.h>
 
 /*DEBUG MODE*/
-#define DEBUG 0
+#define DEBUG 1
 
 
 /* Define FPS */
@@ -72,31 +72,43 @@ int TILE_SIZE = 64;
 
 
 /*Texture array*/
-#define TEXTURE_COUNT 6
+#define TEXTURE_COUNT 7
 SDL_Texture *texture_array[TEXTURE_COUNT];
 SDL_Texture *texture_array_dark[TEXTURE_COUNT];
 
 #define STATIC_FOLDER "static/"
-#define TEXTURE_NUMBER 6
-char* texture_list[TEXTURE_NUMBER]= {"wood.png", "greystone.png", "pillar.png", "redbrick.png", "mossy.png", "purplestone.png"};
+
+char* texture_list[TEXTURE_COUNT]= {"wood.png", "greystone.png", "pillar.png", "redbrick.png", "mossy.png", "purplestone.png", "ghost.png"};
 
 
 #define true 0
 #define false 1
 
-
+/*ENEMY CONFIG*/
 /**
  * struct player - represents the position and direction faced by the player
- * @pos_x: player position x
- * @pos_y: player position y
+ * @x: enemy position x
+ * @y: enemy position y
+ * @width: enemy speed in X direction
  * @angle: player direction in world.
 */
 
-// typedef struct Player{
-//     double pos_x = 0;
-//     double pos_y = 0;
-//     double angle = 0;
-// } Player player;
+typedef struct {
+    int x, y;          // Position
+    int width, height; // Size to be rendered in
+    int speed;         // Movement speed
+    int health;        // Health or hit points
+    SDL_Texture *texture;
+} Enemy;
+
+struct Sprite {
+    SDL_Texture * texture;
+    struct SDL_Rect source;
+    struct SDL_Rect destination;
+};
+typedef struct Sprite Sprite;
+
+#define ENEMY_TEXTURE 6
 
 // TODO - Field of View 
 double FOV = 60;

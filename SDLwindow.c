@@ -64,22 +64,6 @@ int main (void)
     if (init_instance(&instance) != 0)
         return (1);
 
-    //           L1, L2
-    int p1X[] = {0, 750}; //P1L1
-    int p1Y[] = {400, 0}; //P1L2
-
-    int p2X[] = {1500, 750};//P2L1
-    int p2Y[] = {400, 800};//P2L2
-    
-    int i = 0;
-    int array_bound = 2;
-
-    square.x = 0;
-    square.y = WINDOW_HEIGHT/4;
-    square.w = 50;
-    square.h = 50;
-
-
 
 /**
  * PLAYER POSITION AND DIRECTION INITIALIZATION 
@@ -90,17 +74,15 @@ dirX = -1, dirY = 0;
 /* CAMERA PLANE*/
 planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 
- /*the position of the right blue point is pos+dir+plane, and 
- the posistion of the left blue dot is pos+dir-plane (these are all vector additions).*/
-
-/*RIGHT AND LEFT limits(CAMERA PLANE)*/
-//double planeX = planeX + posX + dirX, double plane_Y = planeY + posY + dirY ;
+ 
 
 
  if (load_textures(instance, surface)) {
                 printf("Unable to create textures!");
                 return 1;
             }
+
+ if (DEBUG) printf("Textures Loaded");
 
 
     /**
@@ -130,10 +112,7 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
             }
         } 
 
-        // Draw axes
-        draw_line(&instance, p1X[i], p1Y[i], p2X[i], p2Y[i]);
-        i++;
-        draw_line(&instance, p1X[i], p1Y[i], p2X[i], p2Y[i]);
+        
        
         for(int x = 0; x < (double)WINDOW_WIDTH; x ++)
         {
@@ -247,26 +226,7 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
                 drawEnd = WINDOW_HEIGHT - 1;
             }
 
-            
-/*       
-
-            //give x and y sides different brightness
-            if (side == 1) 
-            {
-                texture = texture_array[worldMap[mapX][mapY]];
-                //SDL_SetRenderDrawColor(instance.renderer, colour.r / 2, colour.g / 2, colour.b / 2, colour.a / 2);
-            }
-            else
-            {
-                texture = texture_array_dark[worldMap[mapX][mapY]];
-                //SDL_SetRenderDrawColor(instance.renderer, colour.r, colour.g, colour.b, colour.a);
-            }
-
-            //draw the pixels of the stripe as a vertical line
-
-            //SDL_RenderDrawLine(instance.renderer, x, drawStart, x, drawEnd);
-
-*/
+        
         
 
             double wallX; // x-coord where the wall was hit
@@ -301,9 +261,7 @@ planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 
         SDL_RenderPresent(instance.renderer);
 
-        i++;
-        if (i == array_bound)
-            i = 0;
+
 
         COLOUR_BLACK(instance.renderer);
         SDL_RenderClear(instance.renderer);
